@@ -249,7 +249,8 @@ class DependencyContainer extends Field
     public function resolve($resource, $attribute = null)
     {
         foreach ($this->meta['fields'] as $field) {
-            $field->resolve($resource, $attribute);
+            if ($this->areDependenciesSatisfied(collect($resource->getAttributes())))
+                $field->resolve($resource, $attribute);
         }
     }
 
