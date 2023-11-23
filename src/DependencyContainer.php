@@ -288,7 +288,7 @@ class DependencyContainer extends Field
      * @param NovaRequest $request
      * @return bool
      */
-    public function areDependenciesSatisfied(NovaRequest $request)
+    public function areDependenciesSatisfied($request)
     {
         if (!isset($this->meta['dependencies'])
             || !is_array($this->meta['dependencies'])) {
