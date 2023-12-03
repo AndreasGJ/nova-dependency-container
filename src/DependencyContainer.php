@@ -186,34 +186,35 @@ class DependencyContainer extends Field
         foreach ($this->meta['dependencies'] as $index => $dependency) {
 
             $this->meta['dependencies'][$index]['satisfied'] = false;
+            $resourceValue = $resource->{$dependency['property']} ?? null;
 
-            if (array_key_exists('empty', $dependency) && empty($resource->{$dependency['property']})) {
+            if (array_key_exists('empty', $dependency) && empty($resourceValue)) {
                 $this->meta['dependencies'][$index]['satisfied'] = true;
                 continue;
             }
             // inverted `empty()`
-            if (array_key_exists('notEmpty', $dependency) && !empty($resource->{$dependency['property']})) {
+            if (array_key_exists('notEmpty', $dependency) && !empty($resourceValue)) {
                 $this->meta['dependencies'][$index]['satisfied'] = true;
                 continue;
             }
             // inverted
-            if (array_key_exists('nullOrZero', $dependency) && in_array($resource->{$dependency['property']},
+            if (array_key_exists('nullOrZero', $dependency) && in_array($resourceValue,
                     [null, 0, '0'], true)) {
                 $this->meta['dependencies'][$index]['satisfied'] = true;
                 continue;
             }
 
-            if (array_key_exists('not', $dependency) && $resource->{$dependency['property']} != $dependency['not']) {
+            if (array_key_exists('not', $dependency) && $resourceValue != $dependency['not']) {
                 $this->meta['dependencies'][$index]['satisfied'] = true;
                 continue;
             }
 
-            if (array_key_exists('in', $dependency) && in_array($resource->{$dependency['property']}, $dependency['in'])) {
+            if (array_key_exists('in', $dependency) && in_array($resourceValue, $dependency['in'])) {
                 $this->meta['dependencies'][$index]['satisfied'] = true;
                 continue;
             }
 
-            if (array_key_exists('notin', $dependency) && !in_array($resource->{$dependency['property']}, $dependency['notin'])) {
+            if (array_key_exists('notin', $dependency) && !in_array($resourceValue, $dependency['notin'])) {
                 $this->meta['dependencies'][$index]['satisfied'] = true;
                 continue;
             }
@@ -224,7 +225,7 @@ class DependencyContainer extends Field
                         $this->meta['dependencies'][$index]['satisfied'] = true;
                     }
                     continue;
-                } elseif ($dependency['value'] == $resource->{$dependency['property']}) {
+                } elseif ($dependency['value'] == $resourceValue) {
                     $this->meta['dependencies'][$index]['satisfied'] = true;
                     continue;
                 }
